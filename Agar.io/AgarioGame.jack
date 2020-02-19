@@ -1,0 +1,148 @@
+class AgarioGame{
+	field Bubble bubble;
+	field int direction;
+
+	constructor AgarioGame new(){
+		let bubble = Bubble.new(200,80,1);
+		let direction = 0;
+		return this;
+	}
+
+method void wait() {
+      do Sys.wait(10);  
+      return;
+   }
+
+method void run(){
+	var char input;
+	var boolean continue;
+	var int spawn;
+	var int seed;
+	var int spawn_x;
+	var int spawn_y;
+	var int SCREEN_RIGHT_RANGE;
+	var int SCREEN_BOTTOM_RANGE;
+	var boolean spawn_success;
+	var boolean ate_success;
+	var Array food_coord_x;
+	var Array food_coord_y;
+	var int points;
+	var int moves;
+	var int food_size;
+	var int spawn_total;
+	
+	let continue = true;
+	let spawn = 0;
+	let spawn_x = 30;
+	let spawn_y = 30;
+	let SCREEN_BOTTOM_RANGE = 250;
+	let SCREEN_RIGHT_RANGE = 510;
+	let food_coord_x = Array.new(15);
+	let food_coord_y = Array.new(15);
+	let points = 0;
+	let moves = 0;
+	let food_size = 20;
+	let spawn_total = 12;
+
+	while(continue){	
+		let input = Keyboard.keyPressed();
+		do wait();
+
+		//deterministically spawns food around the map
+		while(spawn < spawn_total){
+			let spawn_success = bubble.spawn(spawn_x, spawn_y, SCREEN_RIGHT_RANGE, SCREEN_BOTTOM_RANGE, food_size);
+			if(spawn_success){
+				let food_coord_x[spawn] = spawn_x;
+				let food_coord_y[spawn] = spawn_y;
+				let spawn = spawn + 1;				
+			}
+			
+			if((spawn_x + 55) < (SCREEN_RIGHT_RANGE))
+			{
+				let spawn_x = spawn_x + 55;
+			}
+			else
+			{
+				let spawn_x = spawn_x + 55 - SCREEN_RIGHT_RANGE;
+			}
+
+			if((spawn_y + 70) < (SCREEN_BOTTOM_RANGE))
+			{
+				let spawn_y = spawn_y + 70;
+			}
+			else
+			{
+				let spawn_y = spawn_y + 70 - SCREEN_BOTTOM_RANGE;
+			}
+		}
+
+		//quit program with key ESC
+		if(input = 140){
+			let continue = false;
+		}
+
+		// up
+		if(input = 131){
+			let moves = moves + 1;
+			let ate_success = bubble.moveUp(food_coord_x, food_coord_y, food_size, spawn);
+			if(ate_success){
+
+				let points = points + 1;
+			}
+			let input = 0;
+		}
+
+		// 	down
+		if (input = 133){		
+			let moves = moves + 1;
+			let ate_success = bubble.moveDown(SCREEN_BOTTOM_RANGE, food_coord_x, food_coord_y, food_size, spawn);
+			if(ate_success){
+	
+				let points = points + 1;
+			}
+			let input = 0;
+		}
+
+		// left
+		if (input = 130){
+			let moves = moves + 1;
+			let ate_success = bubble.moveLeft(food_coord_x, food_coord_y, food_size, spawn);
+			if(ate_success){	
+				let points = points + 1;
+			}
+			let input = 0;
+		}
+
+		// 	right		
+		if (input = 132){
+			let moves = moves + 1;
+			let ate_success = bubble.moveRight(SCREEN_RIGHT_RANGE, food_coord_x, food_coord_y, food_size, spawn);
+			if(ate_success){
+	
+				let points = points + 1;
+			}
+			let input = 0;
+		}
+
+		let input = 0;
+		if(points = 10){
+			do Screen.clearScreen();
+			do Output.printString("Congrats your bubble ate 10 pieces of food!                                ");
+			do Output.printString(" You traveled a total of ");
+			do Output.printInt(moves);
+			do Output.printString(" pixels.");
+			let continue = false;
+		}
+	}
+
+	return; 
+}
+
+method void destroy(){
+	do bubble.destroy();
+	do Memory.deAlloc(this);
+	return;
+}
+
+}
+

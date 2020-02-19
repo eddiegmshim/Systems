@@ -1,0 +1,9 @@
+class Main{
+	function void main(){
+		var AgarioGame game;
+        let game = AgarioGame.new();
+        do game.run();
+        do game.destroy();
+        return;
+	}
+}

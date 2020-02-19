@@ -1,0 +1,190 @@
+class Bubble{
+	field int x;
+	field int y;
+	field int radius;
+	field int index;
+	field int distance;
+	field boolean ate;
+
+	constructor Bubble new(int input_x, int input_y, int input_radius){
+		let x = input_x;
+		let y = input_y;
+		let radius = input_radius;
+		do draw();
+		return this;
+	}
+
+	method void destroy(){
+		do Memory.deAlloc(this);
+		return;
+	}
+
+	method void draw() {
+		do Screen.setColor(true);
+		do Screen.drawCircle(x, y, radius);
+		return;
+	}
+
+	method boolean spawn(int x, int y, int SCREEN_RIGHT_RANGE, int SCREEN_BOTTOM_RANGE, int food_size){
+		if(x > 50 & ((x + 50) < SCREEN_RIGHT_RANGE) & (y > 50) & ((y + 50) < SCREEN_BOTTOM_RANGE))
+		{
+			do Screen.setColor(true);
+			do Screen.drawRectangle(x,y,x+food_size, y+food_size);
+			return true;
+		}
+		return false;
+	}
+
+	method boolean checkEaten(int x, int y, Array food_coord_x, Array food_coord_y, int radius, int food_size)
+	{
+		if(((food_coord_x[index] < (x + radius)) & ((x + radius) < (food_coord_x[index] + food_size)) & (food_coord_y[index] < (y + radius)) & ((y + radius) < (food_coord_y[index] + food_size))) |
+					((food_coord_x[index] < (x - radius)) & ((x - radius) < (food_coord_x[index] + food_size)) & (food_coord_y[index] < (y - radius)) & ((y - radius) < (food_coord_y[index] + food_size))) |
+					((food_coord_x[index] < (x + radius)) & ((x + radius) < (food_coord_x[index] + food_size)) & (food_coord_y[index] < (y - radius)) & ((y - radius) < (food_coord_y[index] + food_size))) |
+					((food_coord_x[index] < (x - radius)) & ((x - radius) < (food_coord_x[index] + food_size)) & (food_coord_y[index] < (y + radius)) & ((y + radius) < (food_coord_y[index] + food_size))) | //
+					((food_coord_x[index] < x) & (x < (food_coord_x[index] + food_size)) & (food_coord_y[index] < (y + radius)) & ((y + radius) < (food_coord_y[index] + food_size))) |
+					((food_coord_x[index] < x) & (x < (food_coord_x[index] + food_size)) & (food_coord_y[index] < (y - radius)) & ((y - radius) < (food_coord_y[index] + food_size))) |
+					((food_coord_x[index] < (x - radius)) & ((x - radius) < (food_coord_x[index] + food_size)) & (food_coord_y[index] < y) & (y < (food_coord_y[index] + food_size))) |
+					((food_coord_x[index] < (x + radius)) & ((x + radius) < (food_coord_x[index] + food_size)) & (food_coord_y[index] < y) & (y < (food_coord_y[index] + food_size))))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	method boolean moveUp(Array food_coord_x, Array food_coord_y, int food_size, int number_of_spawn){
+		if(y > radius)
+		{
+			//delete circle
+			do Screen.setColor(false);
+			do Screen.drawCircle(x,y,radius);
+			let y = y - 1;
+			let index = 0;
+
+			while(index < number_of_spawn)
+			{
+				if(checkEaten(x,y,food_coord_x,food_coord_y,radius, food_size))
+				{
+					do Screen.setColor(false);
+					do Screen.drawRectangle(food_coord_x[index], food_coord_y[index], food_coord_x[index] + food_size, food_coord_y[index] + food_size);
+					let radius = radius + 3;
+					let food_coord_x[index] = -100;
+					let food_coord_y[index] = -100;
+					let ate = true;
+				}
+				let index = index + 1;						
+			}
+			do Screen.setColor(true);			
+			do Screen.drawCircle(x, y, radius);
+
+			if(ate)
+			{
+				let ate = false;
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	method boolean moveDown(int SCREEN_BOTTOM_RANGE, Array food_coord_x, Array food_coord_y, int food_size, int number_of_spawn){
+		if(y < (SCREEN_BOTTOM_RANGE - radius))
+		{		
+			do Screen.setColor(false);
+			do Screen.drawCircle(x,y,radius);
+			let y = y + 1;
+			let index = 0;
+
+			while(index < number_of_spawn)
+			{
+				if(checkEaten(x,y,food_coord_x,food_coord_y,radius, food_size))
+				{
+					do Screen.setColor(false);
+					do Screen.drawRectangle(food_coord_x[index], food_coord_y[index], food_coord_x[index] + food_size, food_coord_y[index] + food_size);
+					let radius = radius + 3;
+					let food_coord_x[index] = -100;
+					let food_coord_y[index] = -100;
+					let ate = true;
+				}
+				let index = index + 1;						
+			}
+
+			do Screen.setColor(true);
+			do Screen.drawCircle(x,y,radius);
+			if(ate)
+			{
+				let ate = false;
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	
+	method boolean moveLeft(Array food_coord_x, Array food_coord_y, int food_size, int number_of_spawn){
+		if(x > radius)
+		{
+			do Screen.setColor(false);
+			do Screen.drawCircle(x,y,radius);			
+			let x = x - 1;
+			let index = 0;
+
+			while(index < number_of_spawn)
+			{
+				if(checkEaten(x,y,food_coord_x,food_coord_y,radius, food_size))
+				{
+					do Screen.setColor(false);
+					do Screen.drawRectangle(food_coord_x[index], food_coord_y[index], food_coord_x[index] + food_size, food_coord_y[index] + food_size);
+					let radius = radius + 3;
+					let food_coord_x[index] = -100;
+					let food_coord_y[index] = -100;
+					let ate = true;
+				}
+				let index = index + 1;						
+			}
+
+			do Screen.setColor(true);
+			do Screen.drawCircle(x,y,radius);
+			if(ate)
+			{
+				let ate = false;
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	method boolean moveRight(int SCREEN_RIGHT_RANGE, Array food_coord_x, Array food_coord_y, int food_size, int number_of_spawn){
+		if(x < (SCREEN_RIGHT_RANGE - radius))
+		{
+			do Screen.setColor(false);
+			do Screen.drawCircle(x,y,radius);			
+			let x = x + 1;
+			let index = 0;
+
+			while(index < number_of_spawn)
+			{
+				if(checkEaten(x,y,food_coord_x,food_coord_y,radius, food_size))
+				{
+					do Screen.setColor(false);
+					do Screen.drawRectangle(food_coord_x[index], food_coord_y[index], food_coord_x[index] + food_size, food_coord_y[index] + food_size);
+					let radius = radius + 3;
+					let food_coord_x[index] = -100;
+					let food_coord_y[index] = -100;
+					let ate = true;
+				}
+				let index = index + 1;						
+			}
+
+			do Screen.setColor(true);
+			do Screen.drawCircle(x,y,radius);
+			if(ate)
+			{
+				let ate = false;
+				return true;
+			}
+			return false;
+		}
+		return false;	}
+
+}
