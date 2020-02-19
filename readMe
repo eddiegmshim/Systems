@@ -1,0 +1,11 @@
+Exercises to understand what goes on underneath a computer's hood when code is compiled.
+
+Order of translation: 
+Human Thought
+High Level Language & OS (translated by compiler)
+Virtual Machine (translated by VM Translator)
+Assembly Language 
+Machine Language (structured by Computer Architecture)
+Hardware Platform
+Chips & Logic Gates
+Physics/Electrical Engineering
