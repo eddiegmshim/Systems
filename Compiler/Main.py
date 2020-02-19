@@ -6,15 +6,7 @@ from VMWriter import VMWriter
 
 def main():
     # upload all files from path provided as arg
-    file_path = sys.argv[1]    
-        
-#    file_path = "C:/Users/eddie/Documents/MSCS/Intro to Computer Systems/shimEddieProject11/Seven/"
-#    file_path = "C:/Users/eddie/Documents/MSCS/Intro to Computer Systems/shimEddieProject11/ConvertToBin/"
-#    file_path = "C:/Users/eddie/Documents/MSCS/Intro to Computer Systems/shimEddieProject11/Square/"    
-#    file_path = "C:/Users/eddie/Documents/MSCS/Intro to Computer Systems/shimEddieProject11/Average/"
-#    file_path = "C:/Users/eddie/Documents/MSCS/Intro to Computer Systems/shimEddieProject11/Pong/"    
-#    file_path = "C:/Users/eddie/Documents/MSCS/Intro to Computer Systems/shimEddieProject11/ComplexArrays/"
-    
+    file_path = sys.argv[1]        
     jack_files = []    
     for files_in in os.listdir(file_path):
         if(".jack" in files_in):            
