@@ -1,0 +1,23 @@
+A simple video game coded in Jack.
+
+My version is slightly different from agar.io in that the main purpose
+is not to grow as large as you can but to minimize the distance (steps)
+you take in order to eat 10 pieces of food. With each food eaten,
+you grow larger. All food sizes are the same and are edible.
+Food is represented as squares, which are scattered on the map when
+the game is intialized (deterministically, but made to look random).
+You play as the small dot which is controlled by up, down, left, right
+arrows on your keyboard. If you wish to quit the game, hold ESC.
+
+Upon eating 10 pieces, the game completes and tells you your score --
+the amount of steps in pixels you have taken. The optimal player in 
+this game would be able to use something like the traveling salesman
+problem in order to find the shortest path amongst any 10 food locations.
+
+The three files provided for this game are in /src/Agario/
+- AgarioGame.jack
+- Bubble.jack
+- Main.jack
+
+Run by compiling the .jack files with the Jack compiler, then inputting
+the entire Agario folder into the VM emulator.
